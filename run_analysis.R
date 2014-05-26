@@ -47,9 +47,19 @@ TTActivities<-rbind(TrainingActivities, TestActivities)
 
 #Create new variable and name it using conjunction of Activities id from 
 #Training and Test set with Activity labels id.
-TTSet$ActivityName<-merge(TTActivities, 
-                          ActivityLabels, by="id", all.x= TRUE, sort=FALSE)$Activity
-# Add Subject column to Training and Test set
+
+#<WRONG CODE USED TO PRODUCE TIDY DATA FOR COURSE SUBMISSION>
+#TTSet$ActivityName<-merge(TTActivities, 
+#    ActivityLabels, by="id", all.x= TRUE, sort=FALSE)$Activity
+#</WRONG>
+#Correct Activity Naming. This code produced after submission.
+TTSet$ActivityName<-NULL
+for(rowi in 1:nrow(TTActivities))
+    TTSet$ActivityName[rowi]<-as.character(ActivityLabels$Activity[ActivityLabels$id==TTActivities$id[rowi]])
+
+TTSet$ActivityName<-factor(TTSet$ActivityName)
+
+#Add Subject column to Training and Test set
 TTSet$Subject<-factor(rbind(TrainingSubjects, TestSubjects)$id)
 
 #Melt Trainig and Test set by "Subject" and ActivityName and name it TidySet 
